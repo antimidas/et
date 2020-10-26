@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\include",
+    "\\include\\class"
   ],
+  "SelectedNode": "\\include\\class\\class.bencdec.php",
   "PreviewInSolutionExplorer": false
 }
