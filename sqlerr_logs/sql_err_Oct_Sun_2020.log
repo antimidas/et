@@ -1,0 +1,17 @@
+
+===================================================
+ Date: Sun, 25 Oct 2020 02:13:37 +0000
+ Error Number: 1054
+ Error: Unknown column 'avatar' in 'field list'
+ IP Address: 100.6.57.88
+ in file /var/www/html/shoutbox.php on line 465
+ URL:/shoutbox.php?shbox_text=aerb&sent=yes
+ Username: AntiMidas[1]
+===================================================
+ Date: Sun, 25 Oct 2020 02:13:42 +0000
+ Error Number: 1054
+ Error: Unknown column 'avatar' in 'field list'
+ IP Address: 100.6.57.88
+ in file /var/www/html/shoutbox.php on line 465
+ URL:/shoutbox.php?shbox_text=+%3Ablush%3A++%3Awhistle%3A+&sent=yes
+ Username: AntiMidas[1]
