@@ -17,6 +17,9 @@
  \_/ \_/ \_/ \_/   \_/ \_/ \_/ \_/ \_/ \_/ \_/
 
 */
+
+include_once('./cache/api_keys.php');
+
 $stdhead = array(
     /** include css **/
     'css' => array(
@@ -376,11 +379,43 @@ $HTMLOUT.= "<a class='button button-badge float-right' href=\"javascript:ThumbsU
 $HTMLOUT .="</div>";
 $HTMLOUT.= "<ul class='tabs' data-tabs id='example-tabs'>
   <li class='tabs-title is-active'><a href='#tab_a' aria-selected='true'>Download torrent here</a></li>
-  <li class='tabs-title'><a href='#tab_b'>Description and Similar Torrents</a></li>
+  
+  
+  
+  <li class='tabs-title is-active'><a data-open = \"reveal_modal\">Description</a></li></p>
+
+      <div class = \"reveal\" id = \"reveal_modal\" data-reveal>
+         
+<table class='table'>
+	<tr><td><b>{$lang['details_description']}</b></td></tr>
+	<tr>
+	<td>
+	" . str_replace(array("\n","  ") , array("<br />\n","&nbsp; ") , format_comment($torrents_txt["descr"])) . "<!--</div>--></td></tr></table>
+         <button class = \"close-button\" data-close aria-label = \"Close reveal\" type = \"button\">
+            <span aria-hidden = \"true\">×</span>
+         </button>
+      </div>
+
+      <script>
+         $(document).ready(function() {
+            $(document).foundation();
+         })
+      </script>
   <li class='tabs-title'><a href='#tab_c' data-tabs-target='tab_c'>NFO and Other Information</a></li>";
- if ($CURUSER['class'] >= UC_POWER_USER) {  $HTMLOUT .= "<li class='tabs-title'><a href='#tab_d' data-tabs-target='tab_d'>Snatches</a></li>";}
+
+
+
+
+
+
+
+
+if ($CURUSER['class'] >= UC_POWER_USER) {  $HTMLOUT .= "<li class='tabs-title'><a href='#tab_d' data-tabs-target='tab_d'>Snatches</a></li>";}
 $HTMLOUT .= "<li class='tabs-title'><a href='#tab_e' data-tabs-target='tab_e'>YouTube and Imdb</a></li>
 </ul>";
+
+
+
 $HTMLOUT .="<div class='tabs-content' data-tabs-content='example-tabs'>
         <div class='tabs-panel is-active' id='tab_a'>";
 $HTMLOUT.="<br>  
@@ -511,7 +546,7 @@ $i_gave_points = 0;
 		<br /><br />By clicking on the amounts you can give Karma Points making this torrent free for one day.<br /><br /></td></tr>';
 // end
 //==Vote for freeleech
-/*
+
         $elapsed = $wait1 = 0;
         $freepollby = $freepollby1 = '';
         if ($CURUSER["class"] < UC_VIP) {
@@ -591,7 +626,7 @@ $mc1->update_row(false, array(
         }
         //if ($freepollcount < $INSTALLER09['votes_required'] AND $torrents["free"] == 0)
         //$HTMLOUT .="<tr><td class='rowhead'><div align='right'>{$lang['details_freepoll_poll']}</div></td><td align='left'>{$lang['details_freepoll_mess6']}</td></tr>";
-*/
+
         //==End
       /** pdq's ratio afer d/load **/
     $downl = ($CURUSER["downloaded"] + $torrents["size"]);
@@ -626,7 +661,7 @@ $mc1->update_row(false, array(
     break;
 }
 $sr = floor($sr * 1000) / 1000;
-$sr = "<font color='" . get_ratio_color($sr) . "'>" . number_format($sr, 3) . "</font>&nbsp;&nbsp;<img src=\"pic/smilies/{$s}.gif\" alt=\"\" />";
+$sr = "<color='" . get_ratio_color($sr) . "'>" . number_format($sr, 3) . "</font>&nbsp;&nbsp;<img src=\"pic/smilies/{$s}.gif\" alt=\"\" />";
 if ($torrents['free'] >= 1 || $torrents['freetorrent'] >= 1 || $isfree['yep'] || $free_slot OR $double_slot != 0 || $CURUSER['free_switch'] != 0) {
     $HTMLOUT.= "<tr>
 		<td align='right' class='heading'>Ratio After Download</td>
@@ -1027,7 +1062,7 @@ $HTMLOUT.= "<br />
 <div class='large-12 columns'>
 <table class='table'>\n";
 /*if (!empty($torrents['youtube'])) {
-$HTMLOUT.= tr($lang['details_youtube'], '<object type="application/x-shockwave-flash" style="width:560px; height:340px;" data="' . str_replace('watch?v=', 'v/', $torrents['youtube']) . '"><param name="movie" value="' . str_replace('watch?v=', 'v/', $torrents['youtube']) . '" /></object><br /><a 
+$HTMLOUT.= tr($lang['details_youtube'], '<object type="application/x-shockwave-flash" style="width:560px; height:340px;" data="' . str_replace('watch?v=', 'v/', $torrents['youtube']) . '"><param name="movie" value="' . str_replace('watch?v=', 'v/', $torrents['youtube']) . '" /></object><br /><a
 href=\'' . htmlsafechars($torrents['youtube']) . '\' target=\'_blank\'>' . $lang['details_youtube_link'] . '</a>', 1);
 } else {
 $HTMLOUT.= "<tr><td>No youtube data found</td></tr>";
@@ -1040,41 +1075,67 @@ $HTMLOUT.= "<div class='row'>
 <table align='center' class='table table-bordered'>\n";
 //== tvmaze by whocares converted from former tvrage functions by pdq/putyn
 $torrents['tvcats'] = array(
-    5
+    6,
+4,
+3,
+8
 ); // change these to match your TV categories
 if (in_array($torrents['category'], $torrents['tvcats'])) {
     $tvmaze_info = tvmaze($torrents);
     if ($tvmaze_info) $HTMLOUT.= tr($lang['details_tvrage'], $tvmaze_info, 1);
 }
 if ((in_array($torrents['category'], $INSTALLER09['movie_cats'])) && $torrents['url'] != '') {
+//if (in_array($torrents['category'], $INSTALLER09['movie_cats']) && $INSTALLER09['omdb_on']==1) {
 
-    $INSTALLER09['omdb_key'] = '60ac17f0';
-    $INSTALLER09['tmdb_key'] = '6e7090479fbbec08eea8d9571e253b38';
-    $INSTALLER09['lastfm_key'] = '63692beaaf8ba794a541bca291234cd3';
-    $INSTALLER09['omdb_on'] = '1';
-    $INSTALLER09['tmdb_on'] = '1';
+   //$INSTALLER09['omdb_key'] = '60ac17f0';
+  //  $INSTALLER09['tmdb_key'] = '6e7090479fbbec08eea8d9571e253b38';
+   // $INSTALLER09['lastfm_key'] = '63692beaaf8ba794a541bca291234cd3';
+    //$INSTALLER09['omdb_on'] = '1';
+   // $INSTALLER09['tmdb_on'] = '1';
 
-    if (empty($url)) {
-        class IMDBSearch1                                                                                                                                                                                                                            {
-            public static function _movieRedirect($movie, $year)                                                                                                                                                                                         {
-                $movieName = str_replace(' ', '+', $movie);
-                $page = @file_get_contents('https://www.imdb.com/find?s=all&q=' . $movieName . ' (' . $year . ')');
-                if (@preg_match('~<p style="margin:0 0 0.5em 0;"><b>Media from .*?href="/title\/(.*?)".*?</p>~s', $page, $matches)) {
-                    header('Location: https://www.imdb.com/title/' . $matches[1] . '');                                                                                                                                                                          exit();                                                                                                                                                                                                                                  } else if (@preg_match('~<td class="result_text">.*?href="/title\/(.*?)".*?</td>~s', $page, $matches)) {
-                    $plorp = substr(strrchr($matches[1], '/'), 1);
+include_once "./cache/api_keys.php";
 
-                    $matches[1] = substr($matches[1], 0, -strlen($plorp));
-                    return "https://www.imdb.com/title/$matches[1]";                                                                                                                                                                                             exit();                                                                                                                                                                                                                                  } else {
-                    return false;
-                    exit();
-                }
-            }                                                                                                                                                                                                                                        }
-        //Try and the get name, find the name upto the year (2014) and split it into an array Name and Year.  Lets avoid some stuff extra more 1080 and above values                                                                                 if (@preg_match("/(.*).((!720p|!1080p|!480p|!580p)|[1-2][0-9][0-9][0-9])/", $fname, $movie_info, null, 0))                                                                                                                                       $url = IMDBSearch1::_movieRedirect("$movie_info[1]", "$movie_info[2]");
+if (empty($url)) {
+
+    $NewMovie = explode(".", $torrents['name']);
+    $numericFound = 0;
+    foreach($NewMovie as $sections){
+	    if(($numericFound == 0 && is_numeric($sections)) || ($numericFound != 0 && is_numeric($sections))) {
+		    if(($sections > '1900') && ($sections < '2500'))
+		    /* this will output year*/
+		    $year = $sections;
+        }
+	    $numericFound ++;
     }
-    if (substr($url, -1) == '/') {                                                                                                                                                                                                                   $url = substr($url, 0, -1);                                                                                                                                                                                                              }
+    $searchname = str_replace('.', ' ', $torrents['name']);
+    /* this will output name of the movie */
+    $name = stristr($searchname, $year, true);
+
+
+    $url = file_get_contents("https://www.omdbapi.com/?t=" . $searchname ."&plot=full&tomatoes=True&r=json&apikey=" . $INSTALLER09['omdb_key']."");
+    $omdb = json_decode($url, true);
+    foreach ($omdb['Ratings'] as $rat => $rate);
+        $poster = $omdb['Poster'];
+
+	if ($poster != "N/A") {
+        $omdb['Poster'] = "/imdb/images/" . $imdb_id . ".jpg";
+        if (!file_exists('./imdb/images/' . $imdb_id . '.jpg')) {
+            @copy("$poster", "./imdb/images/" . $imdb_id . ".jpg");
+        }
+    }
+	else {
+        if ($poster == "N/A") {
+            $omdb['Poster'] = "./pic/nopostermov.jpg";
+        }
+    }
+}
+
+
+
+//If no IMDB entered lets look in the description for one
+
 
 ////////////OMDB & TMDB by Antimidas and Tundracanine 2018-2019
-
 
     if (in_array($torrents['category'], $INSTALLER09['movie_cats']) && $INSTALLER09['omdb_on']==1) {
 
@@ -1119,39 +1180,60 @@ if ((in_array($torrents['category'], $INSTALLER09['movie_cats'])) && $torrents['
             }
 
 
-            if ($omdb['Title'] != '') {
-                $HTMLOUT .= "<div class='imdb_info' style='width: 80%; display: table;''><tr><th class=' col-md-1 text-center'>
-	</th><div style='width:90%;margin-left:20%;'><th class=' col-md-5 text-left'>
-        <strong><font color='#79c5c5'>Title:</font></strong><font style='font-size:24px;' color='white'> " . $omdb['Title'] . "</font><br/>
+
+                }
+
+            }
+        //}
+
+
+    }
+    if ((in_array($torrents['category'], $INSTALLER09['movie_cats'])) && $torrents['url'] != '') {
+//==auto imdb rewritten putyn 28/06/2011
+
+
+
+        if ($omdb['Title'] != '') {
+            $HTMLOUT .= "
+<th class=' col-md-1 text-center'>
+        </th><strong><font color='#79c5c5'>Title:</font></strong><font style='font-size:24px;' color='white'> " . $omdb['Title'] . "</font><br/>
         <strong><font color='#79c5c5'>Released:</font></strong><font color='grey'> " . $omdb['Released'] . "</font><br/>
         <strong><font color='#79c5c5'>Genre:</font></strong><font color='grey'> " . $omdb['Genre'] . "</font><br/>
 	<strong><font color='#79c5c5'>Rated:</font></strong><font color='grey'> " . $omdb['Rated'] . "</font><br/>
 	<strong><font color='#79c5c5'>Director:</font></strong><font color='grey'> " . $omdb['Director'] . "</font><br/>
-	<strong><font color='#79c5c5'>Cast:</font></strong><font color='grey'> " . $omdb['Actors'] . "</font><br/>
-	<strong><font color='#79c5c5'>Studio:</font></strong><font color='grey'> " . $omdb['Production'] . "</font><br/>
-	<strong><font color='#79c5c5'>Description:</font></strong><font color='grey'> " . $omdb['Plot'] . "</font><br/>
+	<strong><font color='#79c5c5'>Cast:</font></strong><font color='grey'> " . $omdb['Actors'] . "</font><br/>	<strong><font color='#79c5c5'>Description:</font></strong><font color='grey'> " . $omdb['Plot'] . "</font><br/>
     <strong><font color='#79c5c5'>Runtime:</font></strong><font color='grey'> " . $omdb['Runtime'] . "</font><br/>
-    <strong><font color='#79c5c5'>IMDB Rating:</font></strong><span color='white'> " . $omdb['imdbRating'] . "</span><span style='color:grey;'>&nbspfrom&nbsp&nbsp</span><span color='white'>".$omdb['imdbVotes']."</span><span style='color:grey;'>&nbspVotes</span><br/><br/>
-    </div></div>";
+    <strong><font color='#79c5c5'>IMDB Rating:</font></strong><span color='white'> ".$rating."/10</span><span style='color:grey;'>&nbspfrom&nbsp&nbsp</span><span color='white'>".$omdb['imdbVotes']."</span><span style='color:grey;'>&nbspVotes</span><br/><br/>
+    </div></div></tr></div>";
 
-                if (empty($torrents["poster"]) or ($torrents["poster"] == "./pic/nopostermov.jpg") && $omdb['Poster'] != "./pic/nopostermov.jpg") {
-                    sql_query("UPDATE torrents SET poster = " . sqlesc($omdb['Poster']) . " WHERE id = $id LIMIT 1") or sqlerr(__file__, __line__);
-                    $torrents["poster"] = $omdb['Poster'];
-                    $torrent_cache['poster'] = $omdb['Poster'];
-                    if ($torrent_cache) {
-                        $mc1->update_row(false, $torrent_cache);
-                        $mc1->commit_transaction($INSTALLER09['expires']['torrent_details']);
-                        $mc1->delete_value('top5_tor_');
-                        $mc1->delete_value('last5_tor_');
-                        $mc1->delete_value('scroll_tor_');
-                    }
-                }
 
+        }
+//displaying results
+       /* $HTMLOUT.=  "<tr><td align='right' class='heading'>Imdb</td><td align='left'>
+<img src='$poster' style='max-width:600px;' alt='Poster' title='Poster' /><br/>
+<!--<strong>Title:</strong> ".$title."<br/>-->
+<strong>Year:</strong> ".$year."<br/>
+<strong>Rating:</strong> ".$rating."/10<br/>
+<strong>Description:</strong> ".strip_tags($summary.$description)."<br/>
+<strong>Genre:</strong> ".$single_genre."<br/>
+<strong>Stars:</strong> ".$single_cast."<br/></td></tr>
+";*/
+
+        if (empty($torrents["poster"]) or ($torrents["poster"] == "{$INSTALLER09['baseurl']}/pic/noposter.png")) {
+            sql_query("UPDATE torrents SET poster = " . sqlesc($poster) . " WHERE id = $id LIMIT 1") or
+            sqlerr(__file__, __line__);
+            $torrents["poster"] = $poster;
+            $torrent_cache['poster'] = $poster;
+            if ($torrent_cache) {
+                $mc1->update_row(false, $torrent_cache);
+                $mc1->commit_transaction($INSTALLER09['expires']['torrent_details']);
+                $mc1->delete_value('top5_tor_');
+                $mc1->delete_value('last5_tor_');
+                $mc1->delete_value('scroll_tor_');
             }
         }
-
-
     }
+    if (empty($tvmaze_info) && empty($torrents['url'])) $HTMLOUT.= "<tr><td colspan='2'>{$lang['details_on_imdb_tvrage']}</td></tr>";
 
 
     if (empty($torrents['poster']) or ($torrents['poster'] == './pic/noposter.jpg') && $image != './pic/noposter.jpg') {
@@ -1165,53 +1247,8 @@ if ((in_array($torrents['category'], $INSTALLER09['movie_cats'])) && $torrents['
         $HTMLOUT.= "<tr><td>No youtube data found</td></tr>";
     }
 
-/*$imdb = '';
-$imdb_info['id'] = $imdb_info['title'] = $imdb_info['orig_title'] = $imdb_info['year'] = $imdb_info['rating'] = $imdb_info['votes'] = $imdb_info['gen'] = $imdb_info['runtime'] = $imdb_info['country'] = $imdb_info['lanuage'] = $imdb_info['director'] = $imdb_info['produce'] = $imdb_info['write'] = $imdb_info['compose'] = $imdb_info['plotoutline'] = $imdb_info['plot'] = $imdb_info['trailers'] = $imdb_info['comment'] = "";
 
-$imdb_info = get_imdb($torrents['url']);
 
-//<strong><font color=\"red\">Country: </font></strong>".$imdb_info['country']."
-$imdb .= "<div class='imdb'>
-<div class='imdb_info'>
-<strong><font color=\"red\">Year: </font></strong> ".$imdb_info['year']." 
-<strong><font color=\"red\">Genre: </font></strong> ".$imdb_info['gen']."
-<strong><font color=\"red\">Runtime: </font></strong> ".$imdb_info['runtime']." Mins  
-  
-<strong><font color=\"red\">Rating: </font></strong>".$imdb_info['rating']."  
-<br />
-<strong><font color=\"red\">Director: </font></strong>".$imdb_info['director']." 
-<strong><font color=\"red\">Producers: </font></strong> ".$imdb_info['produce']."  
-<br />
-<strong><font color=\"red\">Writters: </font></strong>".$imdb_info['write']."  
-<strong><font color=\"red\">Music: </font></strong>".$imdb_info['compose']." 
-</div><!-- closing imdb info -->
-<br />";
-$imdb.= "
-<div class='imdb_summary'>
-<div style=\"background-color:transparent; border: none; width:100%;\"><div style=\"text-transform: uppercase; border-bottom: 1px solid #CCCCCC; margin-bottom: 3px; font-size: 0.8em; color: red; font-weight: bold; display: block;\"><span onclick=\"if (this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display != '') { this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display = ''; this.innerHTML = '<b>Summary: </b><a href=\'#\' onclick=\'return false;\'>hide</a>'; } else { this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display = 'none'; this.innerHTML = '<b>Summary: </b><a href=\'#\' onclick=\'return false;\'>show</a>'; }\" ><font color='red'><b>Summary: </b></font><a href=\"#\" onclick=\"return false;\">show</a></span></div><div class=\"quotecontent\"><div style=\"display: none;\"><div style='background-color:transparent;width:100%;overflow: auto'>";
-$imdb.= "".$imdb_info['plotoutline']."";
-$imdb.="</div></div></div><!-- closing quote --></div></div><!-- closing imdb summary -->";
-
-$imdb.= "<div class='imdb_plot'>
-<div style=\"background-color:transparent; border: none; width:100%;\"><div style=\"text-transform: uppercase; border-bottom: 1px solid #CCCCCC; margin-bottom: 3px; font-size: 0.8em; color: red; font-weight: bold; display: block;\"><span onclick=\"if (this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display != '') { this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display = ''; this.innerHTML = '<b>Plot: </b><a href=\'#\' onclick=\'return false;\'>hide</a>'; } else { this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display = 'none'; this.innerHTML = '<b>Plot: </b><a href=\'#\' onclick=\'return false;\'>show</a>'; }\" ><font color='red'><b>Plot: </b></font><a href=\"#\" onclick=\"return false;\">show</a></span></div><div class=\"quotecontent\"><div style=\"display: none;\"><div style='background-color:transparent;width:100%;overflow: auto'>";
-$imdb.= "".strip_tags($imdb_info['plot'])."";
-$imdb.="</div></div></div></div></div><!-- closing plot -->";
-
-$imdb.= "<div class='imdb_trailers'>
-<div style=\"background-color:transparent; border: none; width:100%;\"><div style=\"text-transform: uppercase; border-bottom: 1px solid #CCCCCC; margin-bottom: 3px; font-size: 0.8em; color: red; font-weight: bold; display: block;\"><span onclick=\"if (this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display != '') { this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display = ''; this.innerHTML = '<b>trailers </b><a href=\'#\' onclick=\'return false;\'>hide</a>'; } else { this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display = 'none'; this.innerHTML = '<b>trailers </b><a href=\'#\' onclick=\'return false;\'>show</a>'; }\" ><font color='red'><b>trailers </b></font><a href=\"#\" onclick=\"return false;\">show</a></span></div><div class=\"quotecontent\"><div style=\"display: none;\"><div style='background-color:transparent;width:100%;overflow: auto'>";
-$imdb.= "<a href=\"movietrailer.php?movie=".$imdb_info['title']."&amp;year=".$imdb_info['year']."\" onclick=\"return popitup('movietrailer.php?movie=".$imdb_info['title']."&amp;year=".$imdb_info['year']."')\"	><span class='imdb_titles'>View Trailer</span></a>
-";
-$imdb.="</div></div></div></div></div><!-- closing trailers -->";
-
-//Below was added here, but thought better in bittorrent.php where the IMDB function run.  Making sure variables are set right there seems much more sane
-//isset($imdb_info['comment']) ?: $imdb_info['comment'] = 'None Available';
-$imdb.= "<div class='imdb_comments'>
-<div style=\"background-color:transparent; border: none; width:100%;\"><div style=\"text-transform: uppercase; border-bottom: 1px solid #CCCCCC; margin-bottom: 3px; font-size: 0.8em; color: red; font-weight: bold; display: block;\"><span onclick=\"if (this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display != '') { this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display = ''; this.innerHTML = '<b>Comments: </b><a href=\'#\' onclick=\'return false;\'>hide</a>'; } else { this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display = 'none'; this.innerHTML = '<b>Comments: </b><a href=\'#\' onclick=\'return false;\'>show</a>'; }\" ><font color='red'><b>Comments: </b></font><a href=\"#\" onclick=\"return false;\">show</a></span></div><div class=\"quotecontent\"><div style=\"display: none;\"><div style='background-color:transparent;width:100%;overflow: auto'>";
-$imdb.= "".strip_tags($imdb_info['comment'])."";
-$imdb.="</div></div></div></div></div><!-- closing comments -->";
-$imdb .="</div><!-- closing imdb -->";
-$HTMLOUT.= tr('Auto imdb', $imdb, 1);*/
-}
 if (empty($tvmaze_info) && empty($omdb) && in_array($torrents['category'], array_merge($INSTALLER09['movie_cats'], $INSTALLER09['tv_cats']))) $HTMLOUT.= "<tr><td colspan='2'>No Imdb or TVMaze info.</td></tr>";
 $HTMLOUT.= "</table>
      </div><!-- closig col md 12 -->

@@ -45,23 +45,57 @@ if (($active_users_cache = $mc1->get_value($keys['activeusers'])) === false) {
 if (!$active_users_cache['activeusers']) $active_users_cache['activeusers'] = $lang['index_active_users_no'];
 
 if ($CURUSER['opt1'] & user_options::SHOW_SHOUT) {
-$commandbutton = $refreshbutton = $smilebutton = $custombutton = $staffsmiliebutton = '';
-if ($CURUSER['class'] >= UC_STAFF) {
-$staffsmiliebutton.= "<a class='tiny button' href=\"javascript:PopStaffSmiles('shbox','shbox_text')\">{$lang['index_shoutbox_ssmilies']}</a>";
-}
-if (get_smile() != 0) $custombutton.= "
-<a class='tiny button' href=\"javascript:PopCustomSmiles('shbox','shbox_text')\">{$lang['index_shoutbox_csmilies']}</a>";
-if ($CURUSER['class'] >= UC_STAFF) {
-$commandbutton = "<a class='tiny button' href=\"javascript:popUp('shoutbox_commands.php')\">{$lang['index_shoutbox_commands']}</a>\n";
-}
-$refreshbutton = "<a class='tiny button' href='shoutbox.php' target='shoutbox'>{$lang['index_shoutbox_refresh']}</a>\n";
-$smilebutton = "<a class='tiny button' href=\"javascript:PopMoreSmiles('shbox','shbox_text')\">{$lang['index_shoutbox_smilies']}</a>\n";
+    $commandbutton = $refreshbutton = $smilebutton = $custombutton = $staffsmiliebutton = '';
+    if ($CURUSER['class'] >= UC_STAFF) {
+        $staffsmiliebutton .= "<a style='margin-top:5px;margin-left:auto;margin-right:auto;display: inline; background-color: #000C22AB; border-radius: 10px; border: 4px double #cccccc; color: #eeeeee; text-align: center; font-size: 16px; padding: 10px; -webkit-transition: all 0.5s; -moz-transition: all 0.5s; -o-transition: all 0.5s; transition: all 0.5s; cursor: pointer;' class='tiny button' href=\"javascript:PopStaffSmiles('shbox','shbox_text')\">{$lang['index_shoutbox_ssmilies']}</a>";
+    }
+    if (get_smile() != 0) $custombutton .= "
+<a style='margin-top:5px;margin-left:auto;margin-right:auto;display: inline; background-color: #000C22AB; border-radius: 10px; border: 4px double #cccccc; color: #eeeeee; text-align: center; font-size: 16px; padding: 10px; -webkit-transition: all 0.5s; -moz-transition: all 0.5s; -o-transition: all 0.5s; transition: all 0.5s; cursor: pointer;' href=\"javascript:PopCustomSmiles('shbox','shbox_text')\">{$lang['index_shoutbox_csmilies']}</a>";
+    if ($CURUSER['class'] >= UC_STAFF) {
+        $commandbutton = "<a style='margin-top:5px;margin-left:auto;margin-right:auto;display: inline; background-color: #000C22AB; border-radius: 10px; border: 4px double #cccccc; color: #eeeeee; text-align: center; font-size: 16px; padding: 10px; -webkit-transition: all 0.5s; -moz-transition: all 0.5s; -o-transition: all 0.5s; transition: all 0.5s; cursor: pointer;' class='tiny button' href=\"javascript:popUp('shoutbox_commands.php')\">{$lang['index_shoutbox_commands']}</a>\n";
+    }
+    $refreshbutton = "<a style='margin-top:5px;margin-left:auto;margin-right:auto;display: inline; background-color: #000C22AB; border-radius: 10px; border: 4px double #cccccc; color: #eeeeee; text-align: center; font-size: 16px; padding: 10px; -webkit-transition: all 0.5s; -moz-transition: all 0.5s; -o-transition: all 0.5s; transition: all 0.5s; cursor: pointer;' class='tiny button' href='shoutbox.php' target='shoutbox'>{$lang['index_shoutbox_refresh']}</a>\n";
 
-$HTMLOUT .= "<div class='card'>
+    $activenow = "<button style='margin-top:5px;margin-left:auto;margin-right:auto;display: inline; background-color: #000C22AB; border-radius: 10px; border: 4px double #cccccc; color: #eeeeee; text-align: center; font-size: 16px; padding: 10px; -webkit-transition: all 0.5s; -moz-transition: all 0.5s; -o-transition: all 0.5s; transition: all 0.5s; cursor: pointer;' type='button' class='block small-12' data-open = 'reveal_modal'>Users Online<span class='badge success disabled' style='color:#fff'>" . $active_users_cache['actcount'] . "</span></button>
+
+
+
+      <div class = 'reveal' id = 'reveal_modal' data-reveal>
+         
+         <label class='text-left'>" . $lang['index_active'] . "&nbsp;&nbsp;<span class='badge success disabled' style='color:#fff'>" . $active_users_cache['actcount'] . "</span></label>
+  <div class='callout' style='overflow:auto; height:555px;'><p>" . $active_users_cache['activeusers'] . "</p></div>
+
+         <button class = \"close-button\" data-close aria-label = \"Close reveal\" type = \"button\">
+            <span aria-hidden = \"true\">×</span>
+         </button>
+      </div>";
+
+
+ /*   $smilebutton = "<button style='margin-top:5px;margin-left:auto;margin-right:auto;width:auto;display: inline; background-color: #000C22AB; border-radius: 10px; border: 4px double #cccccc; color: #eeeeee; text-align: center; font-size: 16px; padding: 10px; -webkit-transition: all 0.5s; -moz-transition: all 0.5s; -o-transition: all 0.5s; transition: all 0.5s; cursor: pointer;' type='button' class='block small-12' data-open = 'reveal_msmiles'>More Smiles</button>
+
+
+
+      <div class = 'reveal' id = 'reveal_msmiles' data-reveal>
+         <iframe style='border: 0px;width:90%;height:auto;'>
+
+         <button class = \"close-button\" data-close aria-label = \"Close reveal\" type = \"button\">
+            <span aria-hidden = \"true\">×</span>
+         </button>
+      </div>
+      <script>
+         $(document).ready(function() {
+            $(document).foundation();
+         })
+      </script>";*/
+
+    $smilebutton = "<a style='margin-top:5px;margin-left:auto;margin-right:auto;display: inline; background-color: #000C22AB; border-radius: 10px; border: 4px double #cccccc; color: #eeeeee; text-align: center; font-size: 16px; padding: 10px; -webkit-transition: all 0.5s; -moz-transition: all 0.5s; -o-transition: all 0.5s; transition: all 0.5s; cursor: pointer;' href=\"javascript:PopMoreSmiles('shbox','shbox_text')\">{$lang['index_shoutbox_smilies']}</a>\n";
+
+
+    $HTMLOUT .= "<div class='card'>
 	<div class='card-divider portlet-header'>{$lang['index_shoutbox_general']}</div>
   <div class='portlet-content card-section'>";
-$HTMLOUT.= "
-<div class='large-9 columns'>
+    $HTMLOUT .= "
+<div class='large-100 columns'>
 <form action='shoutbox.php' method='get' target='shoutbox' name='shbox' onsubmit='mysubmit()'>
 <iframe src='{$INSTALLER09['baseurl']}/shoutbox.php' class='shout-table' name='shoutbox'></iframe>
 		<div class='input-group'>
@@ -72,11 +106,13 @@ $HTMLOUT.= "
 			</div>
 		</div>
 </div>
-<div class='large-3 columns'>
-	<label class='text-left'>" . $lang['index_active'] . "&nbsp;&nbsp;<span class='badge success disabled' style='color:#fff'>" . $active_users_cache['actcount'] . "</span></label>
-  <div class='callout' style='overflow:auto; height:250px;'><p>" . $active_users_cache['activeusers'] . "</p></div></div>
-<div class='large-12 columns'>
+<!--<div class='large-3 columns'>-->
+	<!--<label class='text-left'>" . $lang['index_active'] . "&nbsp;&nbsp;<span class='badge success disabled' style='color:#fff'>" . $active_users_cache['actcount'] . "</span></label>-->
+  <!--<div class='callout' style='overflow:auto; height:555px;'><p>" . $active_users_cache['activeusers'] . "</p></div></div>-->
+<div  class='large-12 columns'>
+<div style='display:table;margin-left:auto;margin-right:auto;'>
 <a href=\"javascript:SmileIT(':-)','shbox','shbox_text')\"><i class='em em-laughing'></i></a>
+<a href=\"javascript:SmileIT(':thumbu:','shbox','shbox_text')\"><img src='{$INSTALLER09['pic_base_url']}smilies/thumbu.png' alt='Baby' title='Baby' /></a>
 <a href=\"javascript:SmileIT(':smile:','shbox','shbox_text')\"><img src='{$INSTALLER09['pic_base_url']}smilies/smile2.gif' alt='Smiling' title='Smiling' /></a>
 <a href=\"javascript:SmileIT(':-D','shbox','shbox_text')\"><img src='{$INSTALLER09['pic_base_url']}smilies/grin.gif' alt='Grin' title='Grin' /></a>
 <a href=\"javascript:SmileIT(':lol:','shbox','shbox_text')\"><img src='{$INSTALLER09['pic_base_url']}smilies/laugh.gif' alt='Laughing' title='Laughing' /></a>
@@ -98,18 +134,28 @@ $HTMLOUT.= "
 <a href=\"javascript:SmileIT(':rolleyes:','shbox','shbox_text')\"><img src='{$INSTALLER09['pic_base_url']}smilies/rolleyes.gif' alt='Roll Eyes' title='Roll Eyes' /></a>
 <a href=\"javascript:SmileIT(':kiss:','shbox','shbox_text')\"><img src='{$INSTALLER09['pic_base_url']}smilies/kiss.gif' alt='Kiss' title='Kiss' /></a>
 <a href=\"javascript:SmileIT(':blink:','shbox','shbox_text')\"><img src='{$INSTALLER09['pic_base_url']}smilies/blink.gif' alt='Blink' title='Blink' /></a>
-<a href=\"javascript:SmileIT(':baby:','shbox','shbox_text')\"><img src='{$INSTALLER09['pic_base_url']}smilies/baby.gif' alt='Baby' title='Baby' /></a>";
-if ($CURUSER['class'] >= UC_STAFF)
-{
-$HTMLOUT.= '<a class="tiny button" href="'.$INSTALLER09['baseurl'].'/staffpanel.php?tool=shistory">'.$lang['index_shoutbox_history'].'</a>';
+<a href=\"javascript:SmileIT(':baby:','shbox','shbox_text')\"><img src='{$INSTALLER09['pic_base_url']}smilies/baby.gif' alt='Baby' title='Baby' /></a>
+<a href=\"javascript:SmileIT(':wank:','shbox','shbox_text')\"><img src='{$INSTALLER09['pic_base_url']}smilies/wan.gif' alt='Baby' title='Baby' /></a>
+<a href=\"javascript:SmileIT(':thumbd:','shbox','shbox_text')\"><img src='{$INSTALLER09['pic_base_url']}smilies/thumbd.png' alt='Baby' title='Baby' /></a></br>
+
+
+</div>
+<div>".$activenow."</div><br>
+<div  style='margin-left:auto;margin-right:auto;display: flex'>".$smilebutton.$custombutton."";
+    if ($CURUSER['class'] >= UC_STAFF)
+    {
+        $HTMLOUT.= ''.$staffsmiliebutton.'';
+        }
+$HTMLOUT.="</div>";
+
+
+        $HTMLOUT .= "</div></form>";
+        $HTMLOUT .= "</div></div></div><br>";
+
+
 }
-$HTMLOUT.= "{$commandbutton}
-{$staffsmiliebutton}
-{$smilebutton}
-{$custombutton}
-{$refreshbutton}</div></form>";
-$HTMLOUT.= "</div></div>";
-}
+
+
 if (!($CURUSER['opt1'] & user_options::SHOW_SHOUT)) {
    $HTMLOUT.= "<div class='row'><ul class='accordion' data-accordion data-multi-expand='true'>
   <li class='accordion-item is-active' data-accordion-item><b><a href='#' class='accordion-title'>{$lang['index_shoutbox']}</b></a><a class='button' type='button' href='{$INSTALLER09['baseurl']}/shoutbox.php?show_shout=1&amp;show=yes'><div class='accordion-content' data-tab-content>{$lang['index_shoutbox_open']}&nbsp;</a></div></li></ul></div>";

@@ -99,32 +99,36 @@ function torrenttable($res, $variant = "index")
         $i++;
     }
     $htmlout.= "<div class='row'>
-   <table class='responsive-card-table unstriped'>
+   <table style='table-layout: auto;' class=' unstacked unstriped'>
    <thead>
-   <tr>
-   <th>{$lang["torrenttable_type"]}</th>
-   <th><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=1&amp;type={$link1}'>{$lang["torrenttable_name"]}</a></th>
-   <th><i class='fas fa-file-archive' aria-hidden='true'></i></th>";
-    $htmlout.= ($variant == 'index' ? "<th><a href='{$INSTALLER09['baseurl']}/bookmarks.php'><i class='fa fa-bookmark' aria-hidden='true'></i></a></th>" : '');
+   
+   <th style='width:15%; ' class='row unstacked small-12'>Category</th>
+   <th class='row unstacked small-12'><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=1&amp;type={$link1}'>{$lang["torrenttable_name"]}</a></th>
+   <th class='row unstacked small-12'><i class='fas fa-file-archive' aria-hidden='true'></i></th>";
+    $htmlout.= ($variant == 'index' ? "<th class='row unstacked small-12'><a href='{$INSTALLER09['baseurl']}/bookmarks.php'><i class='fa fa-bookmark' aria-hidden='true'></i></a></th>" : '');
     if ($variant == "mytorrents") {
-        $htmlout.= "<th>{$lang["torrenttable_edit"]}</th>";
-        $htmlout.= "<th>{$lang["torrenttable_visible"]}</th>";
-    }
-    $htmlout.= "<th><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=2&amp;type={$link2}'><i class='fas fa-copy' aria-hidden='true'></i></a></th>
-   <th><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=3&amp;type={$link3}'><i class='fa fa-comments' aria-hidden='true'></i></a></th>
-   <th class='text-center' aria-describedby='addedHelpText'><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=4&amp;type={$link4}'><i class='far fa-clock'></i></a></th>
-   ".($INSTALLER09['wait_times'] == 1 ? "<th>{$lang["torrenttable_ttl"]}</th>" : "")."
-   <th class='text-center' aria-describedby='sizeHelpText'><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=5&amp;type={$link5}'><i class='fas fa-chart-pie'></a></th>
-   <th aria-describedby='completedHelpText'><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=6&amp;type={$link6}'><i class='fas fa-sync-alt'></i></a></th>
-   <th><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=7&amp;type={$link7}'><font color='#5da423'><i class='fas fa-arrow-alt-circle-up'></i></font></a></th>
-   <th><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=8&amp;type={$link8}'><font color='red'><i class='fas fa-arrow-alt-circle-down'></i></font></a></th>";
-    if ($variant == 'index') 
-		$htmlout.= "<th><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=9&amp;type={$link9}'>{$lang["torrenttable_uppedby"]}</a></th>";
-    if ($CURUSER['class'] >= UC_STAFF)  {
-		$htmlout .= "<th>Tools</th>";
+        $htmlout.= "<th class='row unstacked small-12'>{$lang["torrenttable_edit"]}</th>";
+        $htmlout.= "<th class='row unstacked small-12'>{$lang["torrenttable_visible"]}</th>";
     }
     $htmlout.= "
-<th><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=10&amp;type={$link10}'>Health</a></th></tr></thead>";
+ 
+
+
+   <th class='row unstacked small-12' class='shrink'><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=2&amp;type={$link2}'><i class='fas fa-copy' aria-hidden='true'></i></a></th>
+   <th class='row unstacked small-12'><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=3&amp;type={$link3}'><i class='fa fa-comments' aria-hidden='true'></i></a></th>
+   <th class='text-center unstacked' aria-describedby='addedHelpText'><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=4&amp;type={$link4}'><i class='fab fa-clock'></i></a></th>
+   ".($INSTALLER09['wait_times'] == 1 ? "<th>{$lang["torrenttable_ttl"]}</th>" : "")."
+   <style>.help-text {color:white;}</style><th class='text-center unstacked' aria-describedby='sizeHelpText'><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=5&amp;type={$link5}'><i class='fas fa-chart-pie'></a></th>
+   <th class='row unstacked small-12' aria-describedby='completedHelpText'><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=6&amp;type={$link6}'><i class='fas fa-sync-alt'></i></a></th>
+   <th class='row unstacked small-12'><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=7&amp;type={$link7}'><font color='#5da423'><i class='fas fa-arrow-alt-circle-up'></i></font></a></th>
+   <th class='row unstacked small-12'><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=8&amp;type={$link8}'><font color='red'><i class='fas fa-arrow-alt-circle-down'></i></font></a></th>";
+    if ($variant == 'index') 
+		$htmlout.= "<th class='row unstacked'><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=9&amp;type={$link9}'>{$lang["torrenttable_uppedby"]}</a></th>";
+    if ($CURUSER['class'] >= UC_STAFF)  {
+		$htmlout .= "<th class='row unstacked'>Tools</th>";
+    }
+    $htmlout.= "
+<div><a href='{$_SERVER["PHP_SELF"]}?{$oldlink}sort=10&amp;type={$link10}'>Health</a></div></tr></thead>";
     $categories = genrelist();
     foreach ($categories as $key => $value) $change[$value['id']] = array(
         'id' => $value['id'],
@@ -154,8 +158,8 @@ function torrenttable($res, $variant = "index")
         else 
 			//$htmlout.= '<tr><p class="' . (($free_color && $all_free_tag != '') || ($row['free'] != 0) || $slots_check ? 'freeleech_color' : 'browse_color') . '"></p>';
 		$htmlout.= "<tbody><tr>";
-		
-		$htmlout.= "<td data-label='{$lang["torrenttable_type"]}'>";
+
+		$htmlout.= "<td style='height:50px;' data-label='{$lang["torrenttable_type"]}'>";
         if (isset($row["cat_name"])) {
             $htmlout.= "<a href='browse.php?cat=" . (int)$row['category'] . "'>";
             if (isset($row["cat_pic"]) && $row["cat_pic"] != "") 

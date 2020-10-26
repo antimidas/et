@@ -42,9 +42,9 @@ if (($requests = $mc1->get_value('requests_')) === false) {
     }
 }
 if (count($requests) > 0) {
-    $HTMLOUT.= "<table class='striped'>";
-    $HTMLOUT.= "<thead>
-			<tr>
+    $HTMLOUT.= "<table style='background-color: #000000c2;' class='striped'>";
+    $HTMLOUT.= "<thead style='background-color:transparent; '>
+			<tr style='background-color:transparent; '>
                 <th><b>{$lang['req_off_cat']}</b></th>
                 <th><b>{$lang['req_off_tit']}</b></th>
 				<th><b>{$lang['req_off_add']}</b></th>
@@ -77,7 +77,7 @@ if (strlen($torrname) > 50) $torrname = substr($torrname, 0, 50) . "...";
  
 else {
      //== If there are no requests
-        if (empty($requests)) $HTMLOUT.= "<tbody><tr><td class='text-left' colspan='5'>{$lang['req_off_noreq']}</td></tr></tbody>";
+        if (empty($requests)) $HTMLOUT.= "<tbody style='background-color:transparent; '><tr><td class='text-left' colspan='5'>{$lang['req_off_noreq']}</td></tr></tbody>";
 }
 $HTMLOUT.= "</table>";
 }
@@ -98,8 +98,8 @@ if (($offers = $mc1->get_value('offers_')) === false) {
     }
 }
 if (count($offers) > 0) {
-    $HTMLOUT.= "<table class='striped'>";
-    $HTMLOUT.= " <thead><tr>
+    $HTMLOUT.= "<table style='background-color: #000000c2;' class='striped'>";
+    $HTMLOUT.= " <thead style='background-color:transparent; '><tr>
                 <th><b>{$lang['req_off_cat']}</b></th>
                 <th><b>{$lang['req_off_tit']}</b></th>
 				<th><b>{$lang['req_off_add']}</b></th>
@@ -130,7 +130,7 @@ if (count($offers) > 0) {
  
 else {
    //== If there are no offers
-        if (empty($offers)) $HTMLOUT.= "<tbody><tr><td class='text-left' colspan='5'>{$lang['req_off_nooff']}</td></tr></tbody>";
+        if (empty($offers)) $HTMLOUT.= "<tbody style='background-color:transparent; '><tr><td class='text-left' colspan='5'>{$lang['req_off_nooff']}</td></tr></tbody>";
 }
 $HTMLOUT.= "</table>";
 }

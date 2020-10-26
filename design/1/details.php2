@@ -144,7 +144,7 @@ if (($torrents = $mc1->get_value('torrent_details_' . $id)) === false) {
 $mc1->delete_value('torrent_details_' . $id);
    if ($change[$torrents['category']]['min_class'] > $CURUSER['class']) stderr("{$lang['details_user_error']}", "{$lang['details_bad_id']}");
 //==
-if (($torrents_ocelot = $mc1->get_value('torrent_ocelot_data_' . $id)) === false && XBT_TRACKER == true) {
+if (($torrents_ocelot = $mc1->get_value('torrent_ocelot_data_' . $id)) === false && OCELOT_TRACKER == true) {
     $torrents_ocelot = mysqli_fetch_assoc(sql_query("SELECT seeders, leechers, times_completed FROM torrents WHERE id =" . sqlesc($id))) or sqlerr(__FILE__, __LINE__);
     $mc1->cache_value('torrent_ocelot_data_' . $id, $torrents_ocelot, $INSTALLER09['expires']['torrent_ocelot_data']);
 }
@@ -173,15 +173,15 @@ if (isset($_GET["hit"])) {
     header("Location: {$INSTALLER09['baseurl']}/details.php?id=$id");
     exit();
 }
-$What_String = (XBT_TRACKER == true ? 'mtime' : 'last_action');
-$What_String_Key = (XBT_TRACKER == true ? 'last_action_xbt_' : 'last_action_');
+$What_String = (OCELOT_TRACKER == true ? 'mtime' : 'last_action');
+$What_String_Key = (OCELOT_TRACKER == true ? 'last_action_xbt_' : 'last_action_');
 if (($l_a = $mc1->get_value($What_String_Key.$id)) === false) {
     $l_a = mysqli_fetch_assoc(sql_query('SELECT '.$What_String.' AS lastseed ' . 'FROM torrents ' . 'WHERE id = ' . sqlesc($id))) or sqlerr(__FILE__, __LINE__);
     $l_a['lastseed'] = (int)$l_a['lastseed'];
     $mc1->add_value('last_action_' . $id, $l_a, 1800);
 }
 /** seeders/leechers/completed caches pdq**/
-$torrents['times_completed'] = ((XBT_TRACKER === false || $torrents_ocelot['times_completed'] === false || $torrents_ocelot['times_completed'] === 0 || $torrents_ocelot['times_completed'] === false) ? $torrents['times_completed'] : $torrents_ocelot['times_completed']);
+$torrents['times_completed'] = ((OCELOT_TRACKER === false || $torrents_ocelot['times_completed'] === false || $torrents_ocelot['times_completed'] === 0 || $torrents_ocelot['times_completed'] === false) ? $torrents['times_completed'] : $torrents_ocelot['times_completed']);
 //==slots by pdq
 $torrent['addup'] = get_date($torrent['addedup'], 'DATE');
 $torrent['addfree'] = get_date($torrent['addedfree'], 'DATE');
@@ -333,9 +333,9 @@ if (!($CURUSER["downloadpos"] == 0 && $CURUSER["id"] != $torrents["owner"] OR $C
         $HTMLOUT.= '<tr>
         <td align="right" class="heading">'.$lang['details_add_slots1'].'</td>
         <td align="left">' . $torrent['freeimg'] . ' <b><font color="' . $torrent['free_color'] . '">'.$lang['details_add_slots2'].'</font></b>'.$lang['details_add_slots3'].'' . $torrent['addfree'] . '</td></tr>';
-        $freeslot = ((!XBT_TRACKER && $CURUSER['freeslots'] >= 1) ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=double\" rel='balloon2' onclick=\"return confirm('".$lang['details_add_slots5']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6']}</b></font></a>&nbsp;- " . htmlsafechars($CURUSER['freeslots']) . "".$lang['details_add_slots7']."" : "");
-        $freeslot_zip = ((!XBT_TRACKER && $CURUSER['freeslots'] >= 1) ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=double&amp;zip=1\" rel='balloon2' onclick=\"return confirm('".$lang['details_add_slots5']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6']}</b></font></a>&nbsp;- " . htmlsafechars($CURUSER['freeslots']) . "".$lang['details_add_slots7']."" : "");
-        $freeslot_text = ((!XBT_TRACKER && $CURUSER['freeslots'] >= 1) ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=double&amp;text=1\" rel='balloon2' onclick=\"return confirm('".$lang['details_add_slots5']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6']}</b></font></a>&nbsp;- " . htmlsafechars($CURUSER['freeslots']) . "".$lang['details_add_slots7']."" : "");
+        $freeslot = ((!OCELOT_TRACKER && $CURUSER['freeslots'] >= 1) ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=double\" rel='balloon2' onclick=\"return confirm('".$lang['details_add_slots5']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6']}</b></font></a>&nbsp;- " . htmlsafechars($CURUSER['freeslots']) . "".$lang['details_add_slots7']."" : "");
+        $freeslot_zip = ((!OCELOT_TRACKER && $CURUSER['freeslots'] >= 1) ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=double&amp;zip=1\" rel='balloon2' onclick=\"return confirm('".$lang['details_add_slots5']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6']}</b></font></a>&nbsp;- " . htmlsafechars($CURUSER['freeslots']) . "".$lang['details_add_slots7']."" : "");
+        $freeslot_text = ((!OCELOT_TRACKER && $CURUSER['freeslots'] >= 1) ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=double&amp;text=1\" rel='balloon2' onclick=\"return confirm('".$lang['details_add_slots5']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6']}</b></font></a>&nbsp;- " . htmlsafechars($CURUSER['freeslots']) . "".$lang['details_add_slots7']."" : "");
     } elseif (!$free_slot && $double_slot) {
         $HTMLOUT.= '<tr>
         <td align="right" class="heading">'.$lang['details_add_slots1'].'</td>
@@ -349,9 +349,9 @@ if (!($CURUSER["downloadpos"] == 0 && $CURUSER["id"] != $torrents["owner"] OR $C
         <td align="left">' . $torrent['freeimg'] . ' ' . $torrent['doubleimg'] . ' <b><font color="' . $torrent['free_color'] . '">'.$lang['details_add_slots9'].'</font></b>'.$lang['details_add_slots10'].'' . $torrent['addfree'] . ''.$lang['details_add_slots11'].'' . $torrent['addup'] . '</p></td></tr>';
         $freeslot = $freeslot_zip = $freeslot_text = '';
     } else {
-    $freeslot = ($CURUSER['freeslots'] >= 1 ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=free\" rel='balloon1' onclick=\"return confirm('".$lang['details_add_slots5f']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6f']}</b></font></a>" . (!XBT_TRACKER ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=double\" rel='balloon2' onclick=\"return confirm('".$lang['details_add_slots5']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6']}</b></font></a>" : "" ) . "&nbsp;- " . htmlsafechars($CURUSER['freeslots']) . "".$lang['details_add_slots7']."" : "");
-        $freeslot_zip = ($CURUSER['freeslots'] >= 1 ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=free&amp;zip=1\" rel='balloon1' onclick=\"return confirm('".$lang['details_add_slots5f']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6f']}</b></font></a>" . (!XBT_TRACKER ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=double&amp;zip=1\" rel='balloon2' onclick=\"return confirm('".$lang['details_add_slots5']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6']}</b></font></a>" : "" ) . "&nbsp;- " . htmlsafechars($CURUSER['freeslots']) . "".$lang['details_add_slots7']."" : "");
-        $freeslot_text = ($CURUSER['freeslots'] >= 1 ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=free&amp;text=1\" rel='balloon1' onclick=\"return confirm('".$lang['details_add_slots5f']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6f']}</b></font></a>" . (!XBT_TRACKER ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=double&amp;text=1\" rel='balloon2' onclick=\"return confirm('".$lang['details_add_slots5']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6']}</b></font></a>" : "") . "&nbsp;- " . htmlsafechars($CURUSER['freeslots']) . "".$lang['details_add_slots7']."" : "");
+    $freeslot = ($CURUSER['freeslots'] >= 1 ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=free\" rel='balloon1' onclick=\"return confirm('".$lang['details_add_slots5f']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6f']}</b></font></a>" . (!OCELOT_TRACKER ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=double\" rel='balloon2' onclick=\"return confirm('".$lang['details_add_slots5']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6']}</b></font></a>" : "" ) . "&nbsp;- " . htmlsafechars($CURUSER['freeslots']) . "".$lang['details_add_slots7']."" : "");
+        $freeslot_zip = ($CURUSER['freeslots'] >= 1 ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=free&amp;zip=1\" rel='balloon1' onclick=\"return confirm('".$lang['details_add_slots5f']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6f']}</b></font></a>" . (!OCELOT_TRACKER ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=double&amp;zip=1\" rel='balloon2' onclick=\"return confirm('".$lang['details_add_slots5']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6']}</b></font></a>" : "" ) . "&nbsp;- " . htmlsafechars($CURUSER['freeslots']) . "".$lang['details_add_slots7']."" : "");
+        $freeslot_text = ($CURUSER['freeslots'] >= 1 ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=free&amp;text=1\" rel='balloon1' onclick=\"return confirm('".$lang['details_add_slots5f']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6f']}</b></font></a>" . (!OCELOT_TRACKER ? "&nbsp;&nbsp;<b>{$lang['details_add_slots4']}</b><a class=\"index\" href=\"download.php?torrent={$id}" . ($CURUSER['ssluse'] == 3 ? "&amp;ssl=1" : "") . "&amp;slot=double&amp;text=1\" rel='balloon2' onclick=\"return confirm('".$lang['details_add_slots5']."')\"><font color='" . $torrent['free_color'] . "'><b>{$lang['details_add_slots6']}</b></font></a>" : "") . "&nbsp;- " . htmlsafechars($CURUSER['freeslots']) . "".$lang['details_add_slots7']."" : "");
     }
     //==
     require_once MODS_DIR . 'free_details.php';   
@@ -715,312 +715,7 @@ if (count($sim_torrents) > 0) {
 }
 $HTMLOUT .= '</div><!-- closing col md 12 --></div><!-- closing row -->';
 $HTMLOUT.= "</div><!-- closing tab pane -->";
-$HTMLOUT .="<div class='tabs-panel' id='tab_c'>";
-$HTMLOUT.= "<br>
-<div class='row'>
-<div class='large-4 columns'>
-<table align='center' class='table table-bordered span3'>\n";
-//==subs by putyn
-if (in_array($torrents["category"], $INSTALLER09['movie_cats']) && !empty($torrents["subs"])) {
-    $HTMLOUT.= "<tr>
-		<td class='rowhead'>Subtitles</td>
-		<td align='left'>";
-    $subs_array = explode(",", $torrents["subs"]);
-    foreach ($subs_array as $k => $sid) {
-        require_once (CACHE_DIR . 'subs.php');
-        foreach ($subs as $sub) {
-            if ($sub["id"] == $sid) $HTMLOUT.= "<img border=\"0\" width=\"25px\" style=\"padding:3px;\"src=\"" . htmlsafechars($sub["pic"]) . "\" alt=\"" . htmlsafechars($sub["name"]) . "\" title=\"" . htmlsafechars($sub["name"]) . "\" />";
-        }
-    }
-    $HTMLOUT.= "</td></tr>\n";
-}
-if ($CURUSER["class"] >= UC_POWER_USER && $torrents["nfosz"] > 0) $HTMLOUT.= "<tr><td class='rowhead'>{$lang['details_nfo']}</td><td align='left'><a href='viewnfo.php?id=" . (int)$torrents['id'] . "'><b>{$lang['details_view_nfo']}</b></a> (" . mksize($torrents["nfosz"]) . ")</td></tr>\n";
-if ($torrents["visible"] == "no") $HTMLOUT.= tr("{$lang['details_visible']}", "<b>{$lang['details_no']}</b>{$lang['details_dead']}", 1);
-if ($moderator) $HTMLOUT.= tr("{$lang['details_banned']}", $torrents["banned"]);
-if ($torrents["nuked"] == "yes") $HTMLOUT.= "<tr><td class='rowhead'><b>Nuked</b></td><td align='left'><img src='{$INSTALLER09['pic_base_url']}nuked.gif' alt='Nuked' title='Nuked' /></td></tr>\n";
-if (!empty($torrents["nukereason"])) $HTMLOUT.= "<tr><td class='rowhead'><b>Nuke-Reason</b></td><td align='left'>" . htmlsafechars($torrents["nukereason"]) . "</td></tr>\n";
-$torrents['cat_name'] = htmlsafechars($change[$torrents['category']]['name']);
-if (isset($torrents["cat_name"])) $HTMLOUT.= tr("{$lang['details_type']}", htmlsafechars($torrents["cat_name"]));
-else $HTMLOUT.= tr("{$lang['details_type']}", "None");
-$HTMLOUT.= tr("Rating", getRate($id, "torrent") , 1);
-// --------------- likes start------
-        $att_str = '';
-        if (!empty($torrents['user_likes'])) {
-            $likes = explode(',', $torrents['user_likes']);
-        } else {
-            $likes = '';
-        }
-        if (!empty($likes) && count(array_unique($likes)) > 0) {
-            if (in_array($CURUSER['id'], $likes)) {
-                if (count($likes) == 1) {
-                    $att_str = jq('You like this');
-                } elseif (count(array_unique($likes)) > 1) {
-                    $att_str = jq('You and&nbsp;') . ((count(array_unique($likes)) - 1) == '1' ? '1 other person likes this' : (count($likes) - 1) . '&nbsp;others like this');
-                }
-            } elseif (!(in_array($CURUSER['id'], $likes))) {
-                if (count(array_unique($likes)) == 1) {
-                    $att_str = '1 other person likes this';
-                } elseif (count(array_unique($likes)) > 1) {
-                    $att_str = (count(array_unique($likes))) . '&nbsp;others like this';
-                }
-            }
-        }
-        $wht = ((!empty($likes) && count(array_unique($likes)) > 0 && in_array($CURUSER['id'], $likes)) ? 'unlike' : 'like');
-
-$HTMLOUT.= tr("Likes","<span id='mlike' data-com='" . (int)$torrents["id"] . "' class='details {$wht}'>[" . ucfirst($wht) . "]</span><span class='tot-" . (int)$torrents["id"] . "' data-tot='" . (!empty($likes) && count(array_unique($likes)) > 0 ? count(array_unique($likes)) : '') . "'>&nbsp;{$att_str}</span>" , 1);
-$HTMLOUT.= tr("{$lang['details_last_seeder']}", "{$lang['details_last_activity']}" . get_date($l_a['lastseed'], '', 0, 1));
-$HTMLOUT.= tr("{$lang['details_size']}", mksize($torrents["size"]) . " (" . number_format($torrents["size"]) . " {$lang['details_bytes']})");
-$HTMLOUT.= tr("{$lang['details_added']}", get_date($torrents['added'], "{$lang['details_long']}"));
-//Display pretime
-    if ($pretime['time'] == '0') {
-    $prestatement = "No pretime found.";
-    } else {
-    $prestatement = get_pretime(time() -  $pretime['time']) . " ago<br />Uploaded " . get_pretime($torrents['added'] - $pretime['time']) . " after pre.";
-    }
-$HTMLOUT.="<tr><td align='right' class='heading'>Pre Time</td><td width='99%' align='left'>". $prestatement."</td></tr>";
-$HTMLOUT.= tr("{$lang['details_views']}", (int)$torrents["views"]);
-$HTMLOUT.= tr("{$lang['details_hits']}", (int)$torrents["hits"]);
-$Ocelot_Or_Default = (XBT_TRACKER == true ? 'snatches_ocelot.php?id=' : 'snatches.php?id=');
-$HTMLOUT.= tr("{$lang['details_snatched']}", ($torrents["times_completed"] > 0 ? "<a href='{$INSTALLER09["baseurl"]}/{$Ocelot_Or_Default}{$id}'>{$torrents['times_completed']} {$lang['details_times']}</a>" : "0 {$lang['details_times']}") , 1);
-$HTMLOUT.= "
-<script type='text/javascript'>
-function showme() {
-    document.getElementById('show').innerHTML = '{$CURUSER['username']} is viewing details for torrent {$INSTALLER09['baseurl']}/details.php?id=" . (int)$torrents['id'] . "\"';
-}
-</script>
-<tr><td class='rowhead'>Status update</td><td><button type='button' class='small button'  id='show' onclick='showme()'>DO IT!</button></td></tr>";
-$HTMLOUT.= "</table></div><!-- closing col md 4 -->
-<div class='large-8 columns'>
-<table align='center' class='table table-bordered'>";
-//==Report Torrent Link
-$HTMLOUT.= tr("Report Torrent", "<form action='report.php?type=Torrent&amp;id=$id' method='post'><input class='small button' type='submit' name='submit' value='Report This Torrent' />&nbsp;&nbsp;<strong><em class='label label-primary'>For breaking the&nbsp;<a href='rules.php'>rules</a></em></strong></form>", 1);
-//== Tor Reputation by pdq
-if ($torrent_cache['rep'] && $INSTALLER09['rep_sys_on']) {
-    $torrents = array_merge($torrents, $torrent_cache['rep']);
-    $member_reputation = get_reputation($torrents, 'torrents', $torrents['anonymous']);
-    $HTMLOUT.= '<tr><td class="heading" valign="top" align="right" width="1%">Reputation</td>
-		<td align="left" width="99%">' . $member_reputation . ' (counts towards uploaders Reputation)<br /></td></tr>';
-}
-//==Anonymous
-$rowuser = (isset($torrents['username']) ? ("<a href='userdetails.php?id=" . (int)$torrents['owner'] . "'><b>" . htmlsafechars($torrents['username']) . "</b></a>") : "{$lang['details_unknown']}");
-$uprow = (($torrents['anonymous'] == 'yes') ? ($CURUSER['class'] < UC_STAFF && $torrents['owner'] != $CURUSER['id'] ? '' : $rowuser . ' - ') . "<i>{$lang['details_anon']}</i>" : $rowuser);
-if ($owned) $uprow.= " $spacer<$editlink><b>{$lang['details_edit']}</b></a>";
-$HTMLOUT.= tr("Upped by", $uprow, 1);
-//==pdq's Torrent Moderation
-if ($CURUSER['class'] >= UC_STAFF) {
-    if (!empty($torrents['checked_by'])) {
-        if (($checked_by = $mc1->get_value('checked_by_' . $id)) === false) {
-            $checked_by = mysqli_fetch_assoc(sql_query("SELECT id FROM users WHERE username=" . sqlesc($torrents['checked_by']))) or sqlerr(__FILE__, __LINE__);
-            $mc1->add_value('checked_by_' . $id, $checked_by, 30 * 86400);
-        }
-        $HTMLOUT.= "<tr>
-	<td class='rowhead'>Checked by</td>
-	<td align='left'>
-<p><a class='label label-primary' href='{$INSTALLER09["baseurl"]}/userdetails.php?id=" . (int)$checked_by['id'] . "'>
-	<strong>" . htmlsafechars($torrents['checked_by']) . "</strong></a></p>
-	<p><a href='{$INSTALLER09["baseurl"]}/details.php?id=" . (int)$torrents['id'] . "&amp;rechecked=1'>
-        <small><em class='label label-primary'><strong>[Re-Check this torrent]</strong></em></small></a> 
-	<a href='{$INSTALLER09["baseurl"]}/details.php?id=" . (int)$torrents['id'] . "&amp;clearchecked=1'>
-	<small><em class='label label-primary'><strong>[Un-Check this torrent]</strong></em></small></a></p>
-	&nbsp;<p><em class=label label-primary'>* STAFF Eyes Only *</em>
-	".(isset($torrents["checked_when"]) && $torrents["checked_when"] > 0 ? "<strong>Checked When : ".get_date($torrents["checked_when"],'DATE',0,1)."</strong>":'' )."</td></tr>";
-    } else {
-        $HTMLOUT.= "<tr><td class='rowhead'>Checked by</td><td align='left'><em class='label label-primary'><strong>NOT CHECKED!</strong></em> 
-       <a href='{$INSTALLER09["baseurl"]}/details.php?id=" . (int)$torrents['id'] . "&amp;checked=1'>
-       <em class='label label-primary'><small><strong>[Check this torrent]</strong></small></em></a>&nbsp;<em class='label label-primary'><strong>* STAFF Eyes Only *</strong></em></p></td></tr>";
-    }
-}
-// end
-if ($torrents["type"] == "multi") {
-    if (!isset($_GET["filelist"])) $HTMLOUT.= tr("{$lang['details_num_files']}<a href=\"./filelist.php?id=$id\" class=\"sublink\"><br />{$lang['details_list']}</a>", (int)$torrents["numfiles"] . " files", 1);
-    else {
-        $HTMLOUT.= tr("{$lang['details_num-files']}", (int)$torrents["numfiles"] . "{$lang['details_files']}", 1);
-    }
-}
-
-if(XBT_TRACKER == true) {
-$HTMLOUT.= tr("{$lang['details_peers']}<br /><a href=\"./peerlist_ocelot.php?id=$id#seeders\" class=\"sublink\">{$lang['details_list']}</a>", (int)$torrents_ocelot["seeders"] . "{$lang['details_add_sd']}" . (int)$torrents_ocelot["leechers"] . "{$lang['details_add_lc']}" . ((int)$torrents_ocelot["seeders"] + (int)$torrents_ocelot["leechers"]) . "{$lang['details_peer_total']}", 1);
-} else {
-$HTMLOUT.= tr("{$lang['details_peers']}<br /><a href=\"./peerlist.php?id=$id#seeders\" class=\"sublink\">{$lang['details_list']}</a>", (int)$torrents["seeders"] . "{$lang['details_add_sd']}" . (int)$torrents["leechers"] . "{$lang['details_add_lc']}" . ((int)$torrents["seeders"] + (int)$torrents["leechers"]) . "{$lang['details_peer_total']}", 1);
-}
-//==putyns thanks mod
-$HTMLOUT.= tr($lang['details_thanks'], '
-	  <script type="text/javascript">
-		/*<![CDATA[*/
-		$(document).ready(function() {
-			var tid = '.$id.';
-			show_thanks(tid);
-		});
-		
-		/*]]>*/
-		
-		</script>
-		<noscript><iframe id="thanked" src ="thanks.php?torrentid='.$id.'" style="width:500px;height:50px;border:none;overflow:auto;">
-	  <p>Your browser does not support iframes. And it has Javascript disabled!</p>
-	  
-	  </iframe></noscript>
-	  <div id="thanks_holder"></div>', 1);
-//==End
-//==09 Reseed by putyn
-$next_reseed = 0;
-if ($torrents["last_reseed"] > 0) $next_reseed = ($torrents["last_reseed"] + 172800); //add 2 days
-$reseed = "<form method=\"post\" action=\"./takereseed.php\">
-	  <select name=\"pm_what\">
-	  <option value=\"last10\">last10</option>
-	  <option value=\"owner\">uploader</option>
-	  </select>
-	  <input class\"button\" type=\"submit\"  " . (($next_reseed > TIME_NOW) ? "disabled='disabled'" : "") . " value=\"SendPM\" />
-	  <input type=\"hidden\" name=\"uploader\" value=\"" . (int)$torrents["owner"] . "\" />
-	  <input type=\"hidden\" name=\"reseedid\" value=\"$id\" />
-	  </form>";
-$HTMLOUT.= tr("Request reseed", $reseed, 1);
-//==End
-$HTMLOUT.= "</table></div><!-- closing col md 8 --></div><!-- closing row -->";
-$HTMLOUT.= "</div> <!-- closing tab pane -->";
-if ($CURUSER['class'] >= UC_POWER_USER) { 
-$HTMLOUT .="<div class='tabs-panel' id='tab_d'>";
-//== Snatched Torrents mod
-$What_Table = (XBT_TRACKER == true ? 'xbt_snatched' : 'snatched');
-$What_cache = (XBT_TRACKER == true ? 'snatched_tor_xbt_' : 'snatched_tor_');
-$What_Value = (XBT_TRACKER == true ? 'WHERE tstamp != "0"' : 'WHERE complete_date != "0"');
-$Which_ID = (XBT_TRACKER == true ? 'fid' : 'id');
-$Which_T_ID = (XBT_TRACKER == true ? 'fid' : 'torrentid');
-$Which_Key_ID = (XBT_TRACKER == true ? 'snatched_count_xbt_' : 'snatched_count_');
-$keys['Snatched_Count'] = $Which_Key_ID . $id;
-
-    if (($Row_Count = $mc1->get_value($keys['Snatched_Count'])) === false) {
-$Count_Q = sql_query("SELECT COUNT($Which_ID) FROM $What_Table $What_Value AND $Which_T_ID =" . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
-$Row_Count = mysqli_fetch_row($Count_Q);
-$mc1->cache_value($keys['Snatched_Count'], $Row_Count, $INSTALLER09['expires']['details_snatchlist']);
-}
-$Count = $Row_Count[0];
-$perpage = 15;
-$pager = pager($perpage, $Count, "details.php?id=$id&amp;");
-$HTMLOUT.= "
-<h3 class='text-center'>{$lang['details_add_snatch1']}<a href='{$INSTALLER09['baseurl']}/details.php?id=" . (int)$torrents['id'] . "'>" . htmlsafechars($torrents['name']) . "</a><br />{$lang['details_add_snatch2']}{$Row_Count['0']}{$lang['details_add_snatch3']}" . ($Row_Count[0] == 1 ? "" : "es") . "</h3>\n";
-
-if (($Detail_Snatch = $mc1->get_value($What_cache . $id)) === false) {
-    if (XBT_TRACKER == true) {
-     //== \\0//
-      $Main_Q = sql_query("SELECT x.*, x.uid AS xu, torrents.username as username1, users.username as username2, users.paranoia, torrents.anonymous as anonymous1, users.anonymous as anonymous2, size, parked, warned, enabled, class, chatpost, leechwarn, donor, x.uid, s.* FROM xbt_files_users AS x INNER JOIN users ON x.uid = users.id INNER JOIN torrents ON x.fid = torrents.id INNER JOIN xbt_snatched AS s ON s.fid=x.fid WHERE s.uid = x.uid AND s.fid = " . sqlesc($id) . " ORDER BY s.fid DESC " . $pager['limit']) or sqlerr(__FILE__, __LINE__);
-} else {
-      $Main_Q = sql_query("SELECT s.*, s.userid AS su, torrents.username as username1, users.username as username2, users.paranoia, torrents.anonymous as anonymous1, users.anonymous as anonymous2, size, parked, warned, enabled, class, chatpost, leechwarn, donor, timesann, owner FROM snatched AS s INNER JOIN users ON s.userid = users.id INNER JOIN torrents ON s.torrentid = torrents.id WHERE complete_date !=0 AND torrentid = " . sqlesc($id) . " ORDER BY complete_date DESC " . $pager['limit']) or sqlerr(__FILE__, __LINE__);
-}
-    while ($snatched_torrent = mysqli_fetch_assoc($Main_Q)) $Detail_Snatch[] = $snatched_torrent;
-    $mc1->cache_value($What_cache . $id, $Detail_Snatch, $INSTALLER09['expires']['details_snatchlist']);
-}
-
-if ((count($Detail_Snatch) > 0 && $CURUSER['class'] >= UC_STAFF)) {
-    if ($Count > $perpage) $HTMLOUT.= $pager['pagertop'];
- //== \\0//
- if (XBT_TRACKER == true) {
-    $snatched_torrent = "
-<table class='table'>
-<tr>
-<td class='colhead' align='left'>{$lang['details_snatches_username']}</td>
-<td class='colhead' align='right'>{$lang['details_snatches_uploaded']}</td>
-" . ($INSTALLER09['ratio_free'] ? "" : "<td class='colhead' align='right'>{$lang['details_snatches_downloaded']}</td>") . "
-<td class='colhead' align='right'>{$lang['details_snatches_ratio']}</td>
-<td class='colhead' align='right'>{$lang['details_snatches_seedtime']}</td>
-<td class='colhead' align='right'>{$lang['details_snatches_leechtime']}</td>
-<td class='colhead' align='center'>{$lang['details_snatches_lastaction']}</td>
-<td class='colhead' align='center'>{$lang['details_snatches_completedat']}</td>
-<td class='colhead' align='center'>{$lang['details_snatches_announced']}</td>
-<td class='colhead' align='center'>{$lang['details_snatches_active']}</td>
-<td class='colhead' align='right'>{$lang['details_snatches_completed']}</td>
-</tr>\n";
-    } else {
-    $snatched_torrent = "
-<table class='table'>
-<tr>
-<td class='colhead' align='left'>{$lang['details_snatches_username']}</td>
-<td class='colhead' align='center'>{$lang['details_snatches_connectable']}</td>
-<td class='colhead' align='right'>{$lang['details_snatches_uploaded']}</td>
-<td class='colhead' align='right'>{$lang['details_snatches_upspeed']}</td>
-" . ($INSTALLER09['ratio_free'] ? "" : "<td class='colhead' align='right'>{$lang['details_snatches_downloaded']}</td>") . "
-" . ($INSTALLER09['ratio_free'] ? "" : "<td class='colhead' align='right'>{$lang['details_snatches_downspeed']}</td>") . "
-<td class='colhead' align='right'>{$lang['details_snatches_ratio']}</td>
-<td class='colhead' align='right'>{$lang['details_snatches_completed']}</td>
-<td class='colhead' align='right'>{$lang['details_snatches_seedtime']}</td>
-<td class='colhead' align='right'>{$lang['details_snatches_leechtime']}</td>
-<td class='colhead' align='center'>{$lang['details_snatches_lastaction']}</td>
-<td class='colhead' align='center'>{$lang['details_snatches_completedat']}</td>
-<td class='colhead' align='center'>{$lang['details_snatches_client']}</td>
-<td class='colhead' align='center'>{$lang['details_snatches_port']}</td>
-<td class='colhead' align='center'>{$lang['details_snatches_announced']}</td>
-</tr>\n";
-}
-
-    if ($Detail_Snatch) {
-        foreach ($Detail_Snatch as $D_S) {
-          
-if (XBT_TRACKER == true) {
-           //== \\0//
-           $ratio = ($D_S["downloaded"] > 0 ? number_format($D_S["uploaded"] / $D_S["downloaded"], 3) : ($D_S["uploaded"] > 0 ? "Inf." : "---"));
-           $active = ($D_S['active'] == 1 ? $active = "<img src='" . $INSTALLER09['pic_base_url'] . "aff_tick.gif' alt='Yes' title='Yes' />" : $active = "<img src='" . $INSTALLER09['pic_base_url'] . "aff_cross.gif' alt='No' title='No' />");
-           $completed = ($D_S['tstamp'] >= 1 ? $completed = "<img src='" . $INSTALLER09['pic_base_url'] . "aff_tick.gif' alt='Yes' title='Yes' />" : $completed = "<img src='" . $INSTALLER09['pic_base_url'] . "aff_cross.gif' alt='No' title='No' />");
-           $snatchuserocelot = (isset($D_S['username2']) ? ("<a href='userdetails.php?id=" . (int)$D_S['uid'] . "'><b>" . htmlsafechars($D_S['username2']) . "</b></a>") : "{$lang['details_snatches_unknown']}");
-           $username_ocelot = (($D_S['anonymous2'] == 'yes' OR $D_S['paranoia'] >= 2) ? ($CURUSER['class'] < UC_STAFF && $D_S['uid'] != $CURUSER['id'] ? '' : $snatchuserocelot . ' - ') . "<i>{$lang['details_snatches_anon']}</i>" : $snatchuserocelot);
-           $snatched_torrent.= "<tr>
-                                 <td align='left'><font size='2%'>{$username_ocelot}</font></td>
-                                 <td align='right'><font size='2%'>" . mksize($D_S["uploaded"]) . "</font></td>
-  " . ($INSTALLER09['ratio_free'] ? "" : "<td align='right'><font size='2%'>" . mksize($D_S["downloaded"]) . "</font></td>") . "
-                                 <td align='right'><font size='2%'>" . htmlsafechars($ratio) . "</font></td>
-                                 <td align='right'><font size='2%'>" . mkprettytime($D_S["seedtime"]) . "</font></td>
-                                 <td align='right'><font size='2%'>" . mkprettytime($D_S["leechtime"]) . "</font></td>
-                                 <td align='center'><font size='2%'>" . get_date($D_S["mtime"], '', 0, 1) . "</font></td>
-                                 <td align='center'><font size='2%'>" . get_date($D_S["completedtime"], '', 0, 1) . "</font></td>
-                                 <td align='center'><font size='2%'>" . (int)$D_S["announced"] . "</font></td>
-                                 <td align='center'><font size='2%'>" . $active . "</font></td>
-                                 <td align='center'><font size='2%'>" . $completed . "</font></td>
-        </tr>\n";
-
-} else {
- $upspeed = ($D_S["upspeed"] > 0 ? mksize($D_S["upspeed"]) : ($D_S["seedtime"] > 0 ? mksize($D_S["uploaded"] / ($D_S["seedtime"] + $D_S["leechtime"])) : mksize(0)));
-           $downspeed = ($D_S["downspeed"] > 0 ? mksize($D_S["downspeed"]) : ($D_S["leechtime"] > 0 ? mksize($D_S["downloaded"] / $D_S["leechtime"]) : mksize(0)));
-    $ratio = ($D_S["downloaded"] > 0 ? number_format($D_S["uploaded"] / $D_S["downloaded"], 3) : ($D_S["uploaded"] > 0 ? "Inf." : "---"));
-           $completed = sprintf("%.2f%%", 100 * (1 - ($D_S["to_go"] / $D_S["size"])));
-           $snatchuser = (isset($D_S['username2']) ? ("<a href='userdetails.php?id=" . (int)$D_S['userid'] . "'><b>" . htmlsafechars($D_S['username2']) . "</b></a>") : "{$lang['details_snatches_unknown']}");
-           $username = (($D_S['anonymous2'] == 'yes' OR $D_S['paranoia'] >= 2) ? ($CURUSER['class'] < UC_STAFF && $D_S['userid'] != $CURUSER['id'] ? '' : $snatchuser . ' - ') . "<i>{$lang['details_snatches_anon']}</i>" : $snatchuser);
-$snatched_torrent.= "<tr>
-                                 <td align='left'><font size='2%'>{$username}</font></td>
-                                 <td align='center'><font size='2%'>" . ($D_S["connectable"] == "yes" ? "<font color='green'>{$lang['details_add_yes']}</font>" : "<font color='red'>{$lang['details_add_no']}</font>") . "</font></td>
-                                 <td align='right'><font size='2%'>" . mksize($D_S["uploaded"]) . "</font></td>
-                                 <td align='right'><font size='2%'>" . htmlsafechars($upspeed) . "/s</font></td>
-  " . ($INSTALLER09['ratio_free'] ? "" : "<td align='right'><font size='2%'>" . mksize($D_S["downloaded"]) . "</font></td>") . "
-  " . ($INSTALLER09['ratio_free'] ? "" : "<td align='right'><font size='2%'>" . htmlsafechars($downspeed) . "/s</font></td>") . "
-                                 <td align='right'><font size='2%'>" . htmlsafechars($ratio) . "</font></td>
-                                 <td align='right'><font size='2%'>" . htmlsafechars($completed) . "</font></td>
-                                 <td align='right'><font size='2%'>" . mkprettytime($D_S["seedtime"]) . "</font></td>
-                                 <td align='right'><font size='2%'>" . mkprettytime($D_S["leechtime"]) . "</font></td>
-                                 <td align='center'><font size='2%'>" . get_date($D_S["last_action"], '', 0, 1) . "</font></td>
-                                 <td align='center'><font size='2%'>" . get_date($D_S["complete_date"], '', 0, 1) . "</font></td>
-                                 <td align='center'><font size='2%'>" . htmlsafechars($D_S["agent"]) . "</font></td>
-                                 <td align='center'><font size='2%'>" . (int)$D_S["port"] . "</font></td>
-                                 <td align='center'><font size='2%'>" . (int)$D_S["timesann"] . "</font></td>
-        </tr>\n";
-        }
-
-}
-
-$snatched_torrent.= "</table>";
-$HTMLOUT.= "
-<p class='text-center'>{$lang['details_add_snatch4']}</p>
-<div class='panel-body'>
-        <div class='panel-group' id='accordion'>
-            <div id='collapseOne' class='panel-collapse collapse in'>
-                <div class='panel'>
-                    <div class='panel-body'>$snatched_torrent</div></div></div>";
-} else {
- if (empty($Detail_Snatch)) $HTMLOUT.= "<p class='text-center'>{$lang['details_add_snatch4']}</p>
-<div class='panel-body'>
-        <div class='panel-group' id='accordion'>
-            <div id='collapseOne' class='panel-collapse collapse in'>
-                <div class='panel'>
-                    <div class='panel-body'><h3 class=text-center'>{$lang['details_add_snatch5']}</h3></div></div></div>";
-   }
-}
-$HTMLOUT .="</div><!-- closing panel-group --></div><!-- closing panel body -->";
+<!-- closing panel body -->";
 $HTMLOUT.= "</div><!-- closing tab pane -->";
 }
 //==
