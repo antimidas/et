@@ -78,7 +78,7 @@ if ($user['paranoia'] < 2 || $user['opt1'] & user_options::HIDECUR || $CURUSER['
     } 
     */
     /*
-    if (isset($seeding)) {    
+    if (isset($seeding)) {
        $HTMLOUT .= "   <tr valign=\"top\">    
                         <td class=\"rowhead\" width=\"10%\">
                          {$lang['userdetails_cur_seed']} 
@@ -90,7 +90,7 @@ if ($user['paranoia'] < 2 || $user['opt1'] & user_options::HIDECUR || $CURUSER['
                    </tr>";    
     } 
     */
-    if (isset($seeding)) 
+    if (isset($seeding))
 		$HTMLOUT.= "<tr>
 			<td>{$lang['userdetails_cur_seed']}</td>
 			<td>
