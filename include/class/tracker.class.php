@@ -124,7 +124,7 @@ class Tracker {
 			}
 			$Sleep = 6;
 			// Send request
-			$File = fsockopen(TRACKER_HOST, TRACKER_PORT, $ErrorNum, $ErrorString);
+			$File = fsockopen('localhost', '2710', $ErrorNum, $ErrorString);
 			if ($File) {
 				if (fwrite($File, $Header) === false) {
 					$Err = "Failed to fwrite()";
